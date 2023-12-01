@@ -117,7 +117,7 @@ const OCRPage = () => {
                 ref={overlayCanvasRef}
                 style={{ position: 'absolute', top: 0, left: 0 }}
             />
-            {devices.length > 1 && (
+            {devices.length > 0 && (
                 <button onClick={toggleCamera} style={{ position: 'absolute', right: '10px', bottom: '10px', zIndex: 1 }}>
                     Changer de Caméra
                 </button>
