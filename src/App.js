@@ -5,6 +5,9 @@ import { AuthProvider } from './components/AuthContext';
 import HomePage from './page/HomePage'; // Importez vos autres composants de page
 import LoginPage from './page/LoginPage';
 import ProfilePage from './page/ProfilePage';
+import SideMenu from './components/SideMenu';
+import UserManagerPage from './page/UserManagerPage';
+import OCRPage from './page/OCRPage';
 // Importez d'autres pages selon vos besoins
 
 const App = () => {
@@ -17,6 +20,10 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/admin" element={<SideMenu />}>
+            <Route path="users" element ={<UserManagerPage />}/>
+            <Route path="webcam" element ={<OCRPage />}/>
+          </Route>
           // Ajoutez d'autres routes si nécessaire
 
             {/* Définissez d'autres routes selon vos besoins */}

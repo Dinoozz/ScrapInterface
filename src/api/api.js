@@ -54,7 +54,7 @@ const api = {
     async getUserById(userId) {
         return sendRequest('get', `/users/${userId}`);
     },
-
+    
     async updateUser(userId, user) {
         return sendRequest('put', `/users/${userId}`, user);
     },
@@ -64,7 +64,6 @@ const api = {
     },
 
     async getUserRole() {
-        console.log("elise");
         return sendRequest('get', '/users/role');
     },
 

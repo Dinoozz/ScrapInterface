@@ -20,10 +20,11 @@ const Menu = () => {
       <div className="flex items-center">
         
         <Link to="/"><img src={logo} alt="Logo" className="h-12 w-12 mr-2" /></Link>
+    {isLoggedIn && <Link to="/admin" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Admin Dashboard</Link>}
       </div>
       <div className="flex items-center">
-      {!isLoggedIn && <Link to="/login" className="text-white px-3 py-2 rounded-md text-sm font-medium">Se connecter</Link>}
-        <Link to="/profile" className="ml-4 flex items-center justify-center bg-gray-700 text-white rounded-full h-10 w-10">
+        {!isLoggedIn && <Link to="/login" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Se connecter</Link>}
+        <Link to="/profile" className="ml-4 flex items-center justify-center bg-gray-700 text-white rounded-full h-10 w-10 hover:bg-gray-500">
             <img src={profile} alt="Profile" className="p-1 h-full w-full" />
         </Link>
       </div>

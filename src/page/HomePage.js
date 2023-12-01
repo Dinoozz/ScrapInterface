@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../components/AuthContext';
 import api from '../api/api';
 
 const HomePage = () => {
@@ -7,8 +9,15 @@ const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState({ sortOrder: 0, ascendingSort: true });
   const [originalProducts, setOriginalProducts] = useState([]);
+  const { isLoggedIn } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!isLoggedIn) {
+      // Redirigez l'utilisateur vers la page d'accueil s'il est déjà connecté
+      navigate('/login');
+    }
+
     const fetchProducts = async () => {
       try {
         const response = await api.getPriceHistoryForAllSiteByProduct();
@@ -144,7 +153,7 @@ const HomePage = () => {
 
   return (
     <div className="container mx-auto py-8 px-20">
-      <div className="mb-4">
+      <div className="mb-4 fixed ">
         <input
           type="text"
           placeholder="Rechercher..."
@@ -156,7 +165,7 @@ const HomePage = () => {
         <table className="min-w-full table-auto leading-normal">
           <thead>
             <tr className="bg-gray-100 ">
-              <th className="px-2 cursor-pointer text-left">Produits</th>
+              <th className="px-2 cursor-pointer text-left">{/*Produits*/}</th>
               {uniqueSites.map(site => (
                 <th key={site} className="px-2 cursor-pointer">{site.toUpperCase()}</th>
               ))}
