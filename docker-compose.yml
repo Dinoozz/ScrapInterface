@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - .:/webapp
+    command: nginx -g 'daemon off;'
+
+  # Ajoutez d'autres services ici si nécessaire (comme une base de données, etc.)
