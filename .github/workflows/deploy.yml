@@ -6,29 +6,12 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  deploy-to-vps:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: Build and Push Docker Image
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        file: ./dockerfile
-        push: true
-        tags: dinoozz/intra-web-client:latest
 
     - name: SSH and Deploy
       uses: appleboy/ssh-action@master
@@ -37,8 +20,19 @@ jobs:
         username: ubuntu
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
+          # Arrêter et supprimer tous les conteneurs Docker
+          docker stop $(docker ps -a -q)
+          docker rm $(docker ps -a -q)
+          
+          # Supprimer toutes les images Docker
+          docker rmi $(docker images -q) -f
+          
+          # Supprimer l'ancien dossier du projet si existant
+          [ -d "web-client" ] && rm -rf web-client
+          
+          # Cloner le dépôt
+          git clone https://github.com/Dinoozz/ScrapInterface.git web-client
+          
+          # Aller dans le dossier du projet et lancer Docker Compose
           cd web-client
-          docker compose down -v
-          docker rmi dinoozz/intra-web-client:latest || true
-          docker pull dinoozz/intra-web-client:latest
-          docker compose up -d
+          docker compose up -d --build
