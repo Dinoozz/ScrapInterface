@@ -28,7 +28,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: yourdockerhubusername/intra-web-client:latest
+        tags: dinoozz/intra-web-client:latest
 
     - name: SSH and Deploy
       uses: appleboy/ssh-action@master
@@ -38,5 +38,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           cd web-client
-          docker pull yourdockerhubusername/intra-web-client:latest
+          docker-compose down
+          docker rmi yourdockerhubusername/yourimage:latest || true
+          docker pull yourdockerhubusername/yourimage:latest
           docker-compose up -d
