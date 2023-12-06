@@ -38,7 +38,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           cd web-client
-          docker-compose down
-          docker rmi yourdockerhubusername/yourimage:latest || true
-          docker pull yourdockerhubusername/yourimage:latest
-          docker-compose up -d
+          docker compose down -v
+          docker rmi dinoozz/intra-web-client:latest || true
+          docker pull dinoozz/intra-web-client:latest
+          docker compose up -d
