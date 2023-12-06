@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://141.94.76.170:5000/api';
+const API_BASE_URL = 'https://api2.camille-lecoq.com:5000/api';
 
 const getAuthConfig = () => {
     const JWtoken = localStorage.getItem('JWToken');
