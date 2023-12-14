@@ -91,8 +91,8 @@ const OCRPage = () => {
                 if (word.trim().length > 0) {
                     const stockProduct = {
                         reference: word.trim(),
-                        warehouse : "6579d126edbe492f95139e65",
-                        team : "6579d11bedbe492f95139e4b",
+                        warehouse : "657ac30ae14cb0b0a253d048",
+                        team : "657ac302e14cb0b0a253d035",
                     };
                     api.searchStockProduct(stockProduct).then(response => {
                         if (response.message === "Produit trouvé") {
