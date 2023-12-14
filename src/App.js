@@ -7,6 +7,7 @@ import LoginPage from './page/LoginPage';
 import ProfilePage from './page/ProfilePage';
 import SideMenu from './components/SideMenu';
 import UserManagerPage from './page/UserManagerPage';
+import WarehousePage from './page/WarehousePage';
 import OCRPage from './page/OCRPage';
 // Importez d'autres pages selon vos besoins
 
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/admin" element={<SideMenu />}>
             <Route path="users" element ={<UserManagerPage />}/>
             <Route path="webcam" element ={<OCRPage />}/>
+            <Route path="warehouse" element ={<WarehousePage />}/>
           </Route>
           // Ajoutez d'autres routes si nécessaire
 

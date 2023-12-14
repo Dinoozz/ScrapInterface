@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API_BASE_URL = 'https://api2.camille-lecoq.com/api';
+//const API_BASE_URL = 'http://localhost:5000/api';
 
 const getAuthConfig = () => {
     const JWtoken = localStorage.getItem('JWToken');
@@ -102,6 +103,70 @@ const api = {
     async deleteProduct(id) {
         return sendRequest('delete', `/products/${id}`);
     },
+
+    /* Team Methods */
+    async addTeam(team) {
+        return sendRequest('post', '/team', team);
+    },
+
+    async getAllTeams() {
+        return sendRequest('get', '/team');
+    },
+
+    async getTeamById(id) {
+        return sendRequest('get', `/team/${id}`);
+    },
+
+    async updateTeam(id, team) {
+        return sendRequest('put', `/team/${id}`, team);
+    },
+
+    async deleteTeam(id) {
+        return sendRequest('delete', `/team/${id}`);
+    },
+
+
+    /* Warehouse Methods */
+
+    async addWarehouse(warehouse) {
+        return sendRequest('post', '/warehouse', warehouse);
+    },
+
+    async getAllWarehouse() {
+        return sendRequest('get', '/warehouse', );
+    },
+
+    async getWarehouseById(id) {
+        return sendRequest('get', `/warehouse/${id}`);
+    },
+
+    async getAllProductByWarehouse(id) {
+        return sendRequest('get', `/warehouse/${id}/product`);
+    },
+
+    async updateWarehouse(id, warehouse) {
+        return sendRequest('put', `/warehouse/${id}`, warehouse);
+    },
+
+    async addTeamToWarehouse(id, teamId) {
+        return sendRequest('put', `/warehouse/${id}/team/${teamId}`);
+    },
+
+    async deleteTeamToWarehouse(id, teamId) {
+        return sendRequest('delete', `/warehouse/${id}/team/${teamId}`);
+    },
+
+    async deleteWarehouse(id) {
+        return sendRequest('delete', `/warehouse/${id}`);
+    },
+
+    /* StockProduct Methods */
+
+    async searchStockProduct(stockProduct) {
+        return sendRequest('put', `/stockProduct/searchproduct`, stockProduct);
+    },
+
+    /* StockHistory Methods */
 
     // ... ici, vous pouvez continuer avec d'autres méthodes si nécessaire
 };

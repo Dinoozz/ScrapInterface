@@ -1,8 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Webcam from 'react-webcam';
 import Tesseract from 'tesseract.js';
+import api from '../api/api'
 
 const OCRPage = () => {
+    const navigate = useNavigate();
     const webcamRef = useRef(null);
     const overlayCanvasRef = useRef(null);
     const [text, setText] = useState('');
@@ -53,10 +56,10 @@ const OCRPage = () => {
             const { videoWidth: width, videoHeight: height } = webcam.video;
     
             // Définir la zone à capturer (bande blanche au centre)
-            const centerX = width * 0; // Commence à 0 pour capturer toute la largeur
+            const centerX = width * 0;
             const centerY = height * 0.40;
-            const regionWidth = width * 1; // 100% de la largeur
-            const regionHeight = height * 0.2; // 20% de la hauteur au centre
+            const regionWidth = width * 1;
+            const regionHeight = height * 0.2;
     
             canvas.width = regionWidth;
             canvas.height = regionHeight;
@@ -71,11 +74,34 @@ const OCRPage = () => {
             Tesseract.recognize(
                 dataUrl,
                 'fra+eng',
-                { logger: m => console.log(m) }
+                { }
             ).then(({ data: { text } }) => {
                 setText(text);
+                processText(text);
             }).catch(e => {
                 console.error('Error during Tesseract recognition:', e);
+            });
+        }
+    };
+
+    const processText = (text) => {
+        const words = text.split(/\s+/);
+        if (words.length > 0 && words[0] !== '') {
+            words.forEach(word => {
+                if (word.trim().length > 0) {
+                    const stockProduct = {
+                        reference: word.trim(),
+                        warehouse : "6579d126edbe492f95139e65",
+                        team : "6579d11bedbe492f95139e4b",
+                    };
+                    api.searchStockProduct(stockProduct).then(response => {
+                        if (response.message === "Produit trouvé") {
+                            navigate('/');
+                        }
+                    }).catch(error => {
+                        console.error('Error searching product:', error);
+                    });
+                }
             });
         }
     };
@@ -84,7 +110,7 @@ const OCRPage = () => {
     useEffect(() => {
         const intervalId = setInterval(() => {
             capture();
-        }, 500); // Capture toutes les 5 secondes
+        }, 500); // Capture toutes les 0.5 secondes
         drawOverlay();
         return () => clearInterval(intervalId);
     }, [currentDeviceId]);
@@ -110,7 +136,7 @@ const OCRPage = () => {
                     height: 480,
                     deviceId: currentDeviceId ? { exact: currentDeviceId } : undefined
                 }}
-                onLoadedMetadata={drawOverlay} // Dessiner l'overlay une fois que les métadonnées sont chargées
+                onLoadedMetadata={drawOverlay}
                 style={{ position: 'absolute', top: 0, left: 0 }}
             />
             <canvas
