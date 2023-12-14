@@ -8,6 +8,7 @@ import ProfilePage from './page/ProfilePage';
 import SideMenu from './components/SideMenu';
 import UserManagerPage from './page/UserManagerPage';
 import WarehousePage from './page/WarehousePage';
+import InventoryPage from './page/InventoryPage';
 import OCRPage from './page/OCRPage';
 // Importez d'autres pages selon vos besoins
 
@@ -26,6 +27,7 @@ const App = () => {
             <Route path="webcam" element ={<OCRPage />}/>
             <Route path="warehouse" element ={<WarehousePage />}/>
           </Route>
+          <Route path="/inventory" element={<InventoryPage />} />
           // Ajoutez d'autres routes si nécessaire
 
             {/* Définissez d'autres routes selon vos besoins */}

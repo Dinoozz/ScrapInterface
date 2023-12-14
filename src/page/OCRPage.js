@@ -1,18 +1,21 @@
+//warehouse : "657ac30ae14cb0b0a253d048",
+//team : "657ac302e14cb0b0a253d035",
+
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Webcam from 'react-webcam';
 import Tesseract from 'tesseract.js';
-import api from '../api/api'
+import api from '../api/api';
 
 const OCRPage = () => {
-    const navigate = useNavigate();
     const webcamRef = useRef(null);
     const overlayCanvasRef = useRef(null);
     const [text, setText] = useState('');
     const [devices, setDevices] = useState([]);
     const [currentDeviceId, setCurrentDeviceId] = useState(null);
+    const [showCamera, setShowCamera] = useState(false);
+    const [foundProducts, setFoundProducts] = useState([]);
+    const [isProcessing, setIsProcessing] = useState(false); // Nouvel état pour contrôler le processus
 
-    // Enumérer les dispositifs de médias disponibles
     useEffect(() => {
         navigator.mediaDevices.enumerateDevices().then(devices => {
             const videoDevices = devices.filter(device => device.kind === 'videoinput');
@@ -22,6 +25,19 @@ const OCRPage = () => {
             }
         });
     }, []);
+
+    useEffect(() => {
+        if (showCamera) {
+            const intervalId = setInterval(() => {
+                if (!isProcessing) { // Vérifie si le processus n'est pas déjà en cours
+                    capture();
+                }
+            }, 500); // Capture toutes les 0.5 secondes
+            drawOverlay();
+            return () => clearInterval(intervalId);
+        }
+    }, [showCamera, currentDeviceId, isProcessing]);
+
 
     // Dessiner les zones grises sur le canvas
     const drawOverlay = () => {
@@ -73,8 +89,7 @@ const OCRPage = () => {
             // Envoyer la Data URL à Tesseract pour la reconnaissance de texte
             Tesseract.recognize(
                 dataUrl,
-                'fra+eng',
-                { }
+                'fra+eng'
             ).then(({ data: { text } }) => {
                 setText(text);
                 processText(text);
@@ -82,40 +97,41 @@ const OCRPage = () => {
                 console.error('Error during Tesseract recognition:', e);
             });
         }
+        setIsProcessing(true);
     };
 
     const processText = (text) => {
         const words = text.split(/\s+/);
-        if (words.length > 0 && words[0] !== '') {
-            words.forEach(word => {
+        const uniqueWords = Array.from(new Set(words)); // Supprime les doublons
+
+        if (uniqueWords.length > 0 && uniqueWords[0] !== '') {
+            uniqueWords.forEach(word => {
                 if (word.trim().length > 0) {
                     const stockProduct = {
                         reference: word.trim(),
-                        warehouse : "657ac30ae14cb0b0a253d048",
-                        team : "657ac302e14cb0b0a253d035",
+                        warehouse : "6579d126edbe492f95139e65",
+                        team : "6579d11bedbe492f95139e4b",
                     };
                     api.searchStockProduct(stockProduct).then(response => {
                         if (response.message === "Produit trouvé") {
-                            navigate('/');
+                            console.log("Produit trouvé: " + word);
+                            setFoundProducts(prevProducts => [...prevProducts, ...response.products]);
+                            setShowCamera(false); // Désactiver la caméra si un produit est trouvé
                         }
+                        setIsProcessing(false); // Fin du traitement
                     }).catch(error => {
                         console.error('Error searching product:', error);
+                        setIsProcessing(false); // Fin du traitement en cas d'erreur
                     });
                 }
             });
+        } else {
+            setIsProcessing(false); // Aucun mot valide, fin du traitement
         }
     };
+    
+    
 
-    // Définir un intervalle pour capturer et reconnaître le texte régulièrement
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            capture();
-        }, 500); // Capture toutes les 0.5 secondes
-        drawOverlay();
-        return () => clearInterval(intervalId);
-    }, [currentDeviceId]);
-
-    // Fonction pour changer de caméra
     const toggleCamera = () => {
         const videoDevices = devices.filter(device => device.kind === 'videoinput');
         if (videoDevices.length > 1) {
@@ -126,30 +142,44 @@ const OCRPage = () => {
     };
 
     return (
-        <div style={{ position: 'relative', width: '640px', height: '480px' }}>
-            <Webcam
-                audio={false}
-                ref={webcamRef}
-                screenshotFormat="image/jpeg"
-                videoConstraints={{
-                    width: 640,
-                    height: 480,
-                    deviceId: currentDeviceId ? { exact: currentDeviceId } : undefined
-                }}
-                onLoadedMetadata={drawOverlay}
-                style={{ position: 'absolute', top: 0, left: 0 }}
-            />
-            <canvas
-                ref={overlayCanvasRef}
-                style={{ position: 'absolute', top: 0, left: 0 }}
-            />
-            {devices.length > 0 && (
-                <button onClick={toggleCamera} style={{ position: 'absolute', right: '10px', bottom: '10px', zIndex: 1 }}>
-                    Changer de Caméra
-                </button>
+        <div>
+            <button onClick={() => setShowCamera(!showCamera)} className="mb-4 bg-blue-500 text-white py-2 px-4 rounded">
+                {showCamera ? 'Arrêter la Caméra' : 'Démarrer la Caméra'}
+            </button>
+            {showCamera && (
+                <div style={{ position: 'relative', width: '640px', height: '480px' }}>
+                    <Webcam
+                        audio={false}
+                        ref={webcamRef}
+                        screenshotFormat="image/jpeg"
+                        videoConstraints={{
+                            width: 640,
+                            height: 480,
+                            deviceId: currentDeviceId ? { exact: currentDeviceId } : undefined
+                        }}
+                        onLoadedMetadata={drawOverlay}
+                        style={{ position: 'absolute', top: 0, left: 0 }}
+                    />
+                    <canvas
+                        ref={overlayCanvasRef}
+                        style={{ position: 'absolute', top: 0, left: 0 }}
+                    />
+                    {devices.length > 0 && (
+                        <button onClick={toggleCamera} style={{ position: 'absolute', right: '10px', bottom: '10px', zIndex: 1 }}>
+                            Changer de Caméra
+                        </button>
+                    )}
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, color: 'white', backgroundColor: 'rgba(0, 0, 0, 0.5)', padding: '10px' }}>
+                        {text}
+                    </div>
+                </div>
             )}
-            <div style={{ position: 'absolute', bottom: 0, left: 0, color: 'white', backgroundColor: 'rgba(0, 0, 0, 0.5)', padding: '10px' }}>
-                {text}
+            <div className="mt-4">
+                {foundProducts.map(product => (
+                    <div key={product._id} className="inline-block bg-gray-200 text-black m-2 p-2 rounded-full">
+                        {product.reference}
+                    </div>
+                ))}
             </div>
         </div>
     );

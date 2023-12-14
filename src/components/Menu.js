@@ -21,6 +21,7 @@ const Menu = () => {
         
         <Link to="/"><img src={logo} alt="Logo" className="h-12 w-12 mr-2" /></Link>
     {isLoggedIn && <Link to="/admin" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Admin Dashboard</Link>}
+    {isLoggedIn && <Link to="/inventory" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Inventaire</Link>}
       </div>
       <div className="flex items-center">
         {!isLoggedIn && <Link to="/login" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Se connecter</Link>}

@@ -68,6 +68,14 @@ const api = {
         return sendRequest('get', '/users/role');
     },
 
+    async getUserTeam() {
+        return sendRequest('get', '/users/team');
+    },
+
+    async getUserInfo() {
+        return sendRequest('get', '/users/info');
+    },
+
     /* Price History Methods */
     async addPriceHistory(priceHistory) {
         return sendRequest('post', '/priceHistory', priceHistory);

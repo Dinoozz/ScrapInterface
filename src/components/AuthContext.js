@@ -13,13 +13,10 @@ export const AuthProvider = ({ children }) => {
 
     const fetchData = async () => {
       if (token) {
-        console.log("salam");
 
         try {
           // Essayez d'obtenir le rôle de l'utilisateur en utilisant le token
           const response = await api.getUserRole();
-
-          console.log(response.message);
 
           // Si la réponse indique un token valide, considérez l'utilisateur comme connecté
           setIsLoggedIn(true);
