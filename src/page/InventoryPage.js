@@ -33,9 +33,12 @@ const WarehouseProductList = () => {
     }, [selectedWarehouseId]);
 
     useEffect(() => {
+        const searchWords = searchTerm.trim().split(/\s+/); // Diviser la chaîne de recherche en mots et ignorer les espaces
         const filtered = products.filter(product => 
-            product.denomination.toLowerCase().includes(searchTerm.toLowerCase()) || 
-            product.reference.toLowerCase().includes(searchTerm.toLowerCase())
+            searchWords.every(word => 
+                product.denomination.toLowerCase().includes(word.toLowerCase()) || 
+                product.reference.toLowerCase().includes(word.toLowerCase())
+            )
         );
         setFilteredProducts(filtered);
     }, [searchTerm, products]);

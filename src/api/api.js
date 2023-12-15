@@ -170,6 +170,10 @@ const api = {
 
     /* StockProduct Methods */
 
+    async sendCsvOpenSi(csv) {
+        return sendRequest('post', `/stockProduct/csv`, csv);
+    },
+
     async searchStockProduct(stockProduct) {
         return sendRequest('put', `/stockProduct/searchproduct`, stockProduct);
     },

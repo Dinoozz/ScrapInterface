@@ -14,10 +14,13 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products 
         };
     }, []);
 
-    const filteredProducts = products.filter(product => 
-        product.reference.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        product.denomination.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredProducts = products.filter(product => {
+        const searchWords = searchTerm.trim().split(/\s+/); // Diviser la chaîne de recherche en mots
+        return searchWords.every(word => 
+            product.reference.toLowerCase().includes(word.toLowerCase()) || 
+            product.denomination.toLowerCase().includes(word.toLowerCase())
+        );
+    });
 
     const handleProductSelect = (product) => {
         setSelectedProduct(product);

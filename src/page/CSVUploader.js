@@ -1,4 +1,58 @@
-//warehouse : "657ac30ae14cb0b0a253d048",
+import React, { useState } from 'react';
+import api from '../api/api'; // Assurez-vous que le chemin est correct
+
+const CSVUploader = () => {
+  const [file, setFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    if (file && window.confirm('Voulez-vous vraiment envoyer ce fichier ?')) {
+      const formData = new FormData();
+      formData.append('csv', file);
+
+      try {
+        const response = await api.sendCsvOpenSi(formData);
+        console.log(response);
+        alert('Fichier CSV uploadé avec succès.');
+      } catch (error) {
+        console.error('Erreur lors de l\'upload du fichier CSV:', error);
+        alert('Erreur lors de l\'upload du fichier CSV.');
+      }
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center p-4">
+      <input
+        className="block w-full text-sm text-gray-500
+                   file:mr-4 file:py-2 file:px-4
+                   file:rounded-full file:border-0
+                   file:text-sm file:font-semibold
+                   file:bg-blue-50 file:text-blue-700
+                   hover:file:bg-blue-100
+                   cursor-pointer"
+        type="file"
+        accept=".csv"
+        onChange={handleFileChange}
+      />
+      <button
+        className="mt-2 px-4 py-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+        onClick={handleUpload}
+      >
+        Uploader le CSV
+      </button>
+    </div>
+  );
+};
+
+export default CSVUploader;
+
+
+
+/*//warehouse : "657ac30ae14cb0b0a253d048",
 //team : "657ac302e14cb0b0a253d035",
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -185,4 +239,4 @@ const OCRPage = () => {
     );
 };
 
-export default OCRPage;
+export default OCRPage;*/
