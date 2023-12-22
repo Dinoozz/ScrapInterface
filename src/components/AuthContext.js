@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
 
           // Si la réponse indique un token valide, considérez l'utilisateur comme connecté
           setIsLoggedIn(true);
-          setUserRole(response.role);
+          setUserRole(response.data.role);
         } catch (error) {
           // En cas d'erreur, cela signifie que le token est invalide, appelez la fonction logOut
           logOut();

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import ManualSearchModal from './ManualSearchModal';
-import { FaCamera, FaBarcode, FaSearch } from 'react-icons/fa';
-import { MdCameraEnhance } from 'react-icons/md';
+import StockProductCreation from './StockProductCreationModal';
+import StockOCRModal from './StockOCRModal';
+import { FaCamera, FaSearch, FaPlus } from 'react-icons/fa';
 
-const BottomMenu = ({ userTeam, selectedWarehouse, products }) => {
+const BottomMenu = ({ userTeam, selectedWarehouse, products, onProductAdded }) => {
     const [modalToShow, setModalToShow] = useState('');
 
     const openModal = (modalName) => {
@@ -16,38 +17,30 @@ const BottomMenu = ({ userTeam, selectedWarehouse, products }) => {
 
     return (
         <div className="fixed bottom-0 left-0 right-0 flex justify-around bg-white border-t border-gray-300 shadow-lg">
-            <button className="w-1/4 h-16 flex flex-col items-center justify-center" onClick={() => openModal('modal1')}>
+            <button className="w-1/3 h-16 flex flex-col items-center justify-center" onClick={() => openModal('modal1')}>
+                <FaPlus className="text-2xl"/>
+                <span className="text-xs mt-1">Ajouter</span>
+            </button>
+            <button className="w-1/3 h-16 flex flex-col items-center justify-center" onClick={() => openModal('modal2')}>
                 <FaCamera className="text-2xl"/>
                 <span className="text-xs mt-1">Caméra</span>
             </button>
-            <button className="w-1/4 h-16 flex flex-col items-center justify-center" onClick={() => openModal('modal2')}>
-                <MdCameraEnhance className="text-2xl"/>
-                <span className="text-xs mt-1">Scan</span>
-            </button>
-            <button className="w-1/4 h-16 flex flex-col items-center justify-center" onClick={() => openModal('modal3')}>
-                <FaBarcode className="text-2xl"/>
-                <span className="text-xs mt-1">Code-barres</span>
-            </button>
-            <button className="w-1/4 h-16 flex flex-col items-center justify-center" onClick={() => openModal('modal4')}>
+            <button className="w-1/3 h-16 flex flex-col items-center justify-center" onClick={() => openModal('modal3')}>
                 <FaSearch className="text-2xl"/>
                 <span className="text-xs mt-1">Recherche</span>
             </button>
-            {/* Modale 1 */}
+            {/* Modale pour "Ajouter" */}
             {modalToShow === 'modal1' && (
-                <ManualSearchModal onClose={closeModal} userTeam={userTeam} selectedWarehouse={selectedWarehouse} products={products} />
+                <StockProductCreation onClose={closeModal} userTeam={userTeam} selectedWarehouse={selectedWarehouse} onProductAdded={onProductAdded}/>
             )}
-            {/* Modale 2 */}
+            {/* Modale pour "Caméra" */}
             {modalToShow === 'modal2' && (
-                <ManualSearchModal onClose={closeModal} userTeam={userTeam} selectedWarehouse={selectedWarehouse} products={products} />
-                )}
-            {/* Modale 3 */}
+                <StockOCRModal onClose={closeModal} userTeam={userTeam} selectedWarehouse={selectedWarehouse} products={products} />
+            )}
+            {/* Modale pour "Recherche" */}
             {modalToShow === 'modal3' && (
-                <ManualSearchModal onClose={closeModal} userTeam={userTeam} selectedWarehouse={selectedWarehouse} products={products} />
-                )}
-            {/* Modale 4 */}
-            {modalToShow === 'modal4' && (
-                <ManualSearchModal onClose={closeModal} userTeam={userTeam} selectedWarehouse={selectedWarehouse} products={products} />
-                )}
+                <ManualSearchModal onClose={closeModal} userTeam={userTeam} selectedWarehouse={selectedWarehouse} products={products} onProductAdded={onProductAdded}/>
+            )}
         </div>
     );
 };

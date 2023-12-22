@@ -19,7 +19,7 @@ const TeamManagerComponent = ({ onUserAssignedToTeam }) => {
   const fetchTeams = async () => {
     try {
       const response = await api.getAllTeams();
-      setTeams(response);
+      setTeams(response.data);
     } catch (error) {
       console.error('Erreur lors de la récupération des équipes:', error);
     }
@@ -28,7 +28,7 @@ const TeamManagerComponent = ({ onUserAssignedToTeam }) => {
   const fetchUsers = async () => {
     try {
       const response = await api.getAllUsers();
-      setUsers(response);
+      setUsers(response.data);
     } catch (error) {
       console.error('Erreur lors de la récupération des utilisateurs:', error);
     }
@@ -42,7 +42,7 @@ const TeamManagerComponent = ({ onUserAssignedToTeam }) => {
   const refreshTeam = async (teamId) => {
     try {
       const updatedTeam = await api.getTeamById(teamId);
-      setSelectedTeam(updatedTeam);
+      setSelectedTeam(updatedTeam.data);
       fetchTeams();
     } catch (error) {
       console.error('Erreur lors de la récupération des détails de l\'équipe:', error);

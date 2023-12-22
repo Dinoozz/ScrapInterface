@@ -24,9 +24,9 @@ const ProfilePage = () => {
         try {
             const response = await api.getUserInfo();
             setUserInfo({
-                username: response.username,
-                email: response.email,
-                role: response.role
+                username: response.data.username,
+                email: response.data.email,
+                role: response.data.role
             });
         } catch (error) {
             console.error('Erreur lors de la récupération des informations de l\'utilisateur:', error);
@@ -36,10 +36,10 @@ const ProfilePage = () => {
     const fetchUserTeam = async () => {
         try {
             const teamResponse = await api.getUserTeam();
-            const teamId = teamResponse.team;
+            const teamId = teamResponse.data.team;
             if (teamId) {
                 const teamInfo = await api.getTeamById(teamId);
-                setUserTeamName(teamInfo.name);
+                setUserTeamName(teamInfo.data.name);
             }
         } catch (error) {
             console.error('Erreur lors de la récupération de l\'équipe de l\'utilisateur:', error);

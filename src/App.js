@@ -9,7 +9,7 @@ import SideMenu from './components/SideMenu';
 import UserManagerPage from './page/UserManagerPage';
 import WarehousePage from './page/WarehousePage';
 import InventoryPage from './page/InventoryPage';
-import CSVUploader from './page/CSVUploader';
+import StockErrorPage from './page/StockErrorPage';
 // Importez d'autres pages selon vos besoins
 
 const App = () => {
@@ -24,7 +24,7 @@ const App = () => {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/admin" element={<SideMenu />}>
             <Route path="users" element ={<UserManagerPage />}/>
-            <Route path="webcam" element ={<CSVUploader />}/>
+            <Route path="stockerror" element ={<StockErrorPage />}/>
             <Route path="warehouse" element ={<WarehousePage />}/>
           </Route>
           <Route path="/inventory" element={<InventoryPage />} />

@@ -43,15 +43,19 @@ const WarehouseProductList = () => {
         setFilteredProducts(filtered);
     }, [searchTerm, products]);
 
+    useEffect(() => {
+        setCurrentPage(1); // Réinitialiser la page à 1 lorsque searchTerm change
+    }, [searchTerm]);
+
 
     const fetchUserTeam = async () => {
         try {
             const response = await api.getUserTeam();
-            if (response.team === "Aucune")
+            if (response.data.team === "Aucune")
                 navigate('/');
-            setUserTeamId(response.team);
-            const teamResponse = await api.getTeamById(response.team);
-            setUserTeamName(teamResponse.name);
+            setUserTeamId(response.data.team);
+            const teamResponse = await api.getTeamById(response.data.team);
+            setUserTeamName(teamResponse.data.name);
         } catch (error) {
             console.error('Erreur lors de la récupération de l\'équipe de l\'utilisateur:', error);
         }
@@ -60,7 +64,7 @@ const WarehouseProductList = () => {
     const getAllWarehouses = async (teamId) => {
         try {
             const response = await api.getAllWarehouse();
-            const assignedWarehouses = response.filter(warehouse => 
+            const assignedWarehouses = response.data.filter(warehouse => 
                 warehouse.listAssignedTeam.some(team => team._id === teamId)
             );
             setFilteredWarehouses(assignedWarehouses);
@@ -72,12 +76,19 @@ const WarehouseProductList = () => {
     const fetchProductsByWarehouse = async (warehouseId) => {
         try {
             const response = await api.getAllProductByWarehouse(warehouseId);
-            const teamProducts = response.filter(product => 
+            console.log(response.data);
+            const teamProducts = response.data.filter(product => 
                 product.assignedTeam === userTeamId
             );
             setProducts(teamProducts);
         } catch (error) {
             console.error('Erreur lors de la récupération des produits:', error);
+        }
+    };
+
+    const handleProductAdded = async () => {
+        if (selectedWarehouseId) {
+            await fetchProductsByWarehouse(selectedWarehouseId);
         }
     };
 
@@ -164,35 +175,35 @@ const WarehouseProductList = () => {
                 onChange={handleSearchChange}
             />
             <div className="mt-4">
-                <table className="min-w-full table-auto table-fixed">
-                    <thead className="bg-gray-200">
-                        <tr>
-                            <th className="py-2">Dénomination</th>
-                            <th className="px-10 py-2">Référence</th>
-                            <th className="py-2">Quantité</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentTableData.map(product => (
-                            <tr key={product._id} className="h-12 border-b border-gray-900">
-                                <td className="px-4 py-2 overflow-auto">
-                                    <div className="w-12 h-10">{product.denomination}</div>
-                                </td>
-                                <td className="px-4 py-2 overflow-auto">
-                                    <div className="w-12 h-10">{product.reference}</div>
-                                </td>
-                                <td className="px-4 py-2 overflow-auto">
-                                    <div className="w-12 h-10">{product.quantity}</div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
+            <table className="w-full table-auto table-fixed">
+                <thead className="bg-gray-200">
+                    <tr>
+                        <th style={{ width: '60%' }} className="py-2">Dénomination</th>
+                        <th style={{ width: '30%' }} className="py-2">Référence</th>
+                        <th style={{ width: '10%' }} className="py-2">Qté</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {currentTableData.map(product => (
+                    <tr key={product._id} className="h-12 border-b border-gray-900">
+                        <td style={{ width: '60%' }} className="px-4 py-2 overflow-auto">
+                            <div className="h-10">{product.denomination}</div>
+                        </td>
+                        <td style={{ width: '30%' }} className="px-4 py-2 overflow-auto">
+                            <div className="h-10">{product.reference}</div>
+                        </td>
+                        <td style={{ width: '10%' }} className="px-4 py-2 overflow-auto">
+                            <div className="h-10">{product.quantity}</div>
+                        </td>
+                    </tr>
+                    ))}
+                </tbody>
                 </table>
             </div>
             <div className="flex justify-center mt-4">
                 {selectedWarehouseId && paginationNumbers().map(pageNumber => {
                     if (pageNumber === "...") {
-                        return <span className="px-4 py-2">...</span>;
+                        return <span className="px- py-2">...</span>;
                     }
 
                     return (
@@ -206,8 +217,10 @@ const WarehouseProductList = () => {
                     );
                 })}
             </div>
-            { selectedWarehouseId && <BottomMenu userTeam={userTeamId} selectedWarehouse={selectedWarehouseId} products={products} />}
+            { selectedWarehouseId && <BottomMenu userTeam={userTeamId} selectedWarehouse={selectedWarehouseId} products={products} onProductAdded={handleProductAdded}/>}
         </div>
+
+        
     );
 };
 

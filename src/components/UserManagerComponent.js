@@ -32,8 +32,8 @@ const UserManagerComponent = ({ onUserCreated }) => {
     const getAllUsers = async () => {
         try {
           const response = await api.getAllUsers();
-          console.log(response);
-          setUsers(response);
+          console.log(response.data);
+          setUsers(response.data);
         } catch (error) {
           console.error('Erreur lors de la récupération de tous les utilisateurs:', error);
         }

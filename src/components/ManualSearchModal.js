@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import api from '../api/api';
 
-const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products }) => {
+const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products, onProductAdded }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
+    const [responseState, setResponseState] = useState('null');
 
     useEffect(() => {
         // Désactiver le défilement lors de l'ouverture de la modal
@@ -31,15 +33,38 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products 
     };
 
     const submitHandler = async () => {
-        // Votre logique pour envoyer la requête API
-        // Exemple: api.addProductToWarehouse({ teamId: userTeam, warehouseId: selectedWarehouse, productId: selectedProduct?._id, quantity });
-        console.log('Submitting:', { teamId: userTeam, warehouseId: selectedWarehouse, productId: selectedProduct?._id, quantity });
-        onClose(); // Ferme la modal après l'envoi
+        if (!selectedProduct || !quantity) {
+            setResponseState('error');
+            setTimeout(() => {
+                setResponseState(null);
+            }, 1000);
+        } else if (window.confirm("Êtes-vous sûr de vouloir ajouter ce produit ?")) {
+            // Votre logique pour envoyer la requête API
+            const response = await api.updateStockProduct(selectedProduct?._id, {
+                teamId: userTeam,
+                warehouseId: selectedWarehouse,
+                quantity: quantity
+            });
+            if (response.status == 200) {
+                setResponseState('success');
+            } else
+                setResponseState('error');
+            console.log();
+                
+            
+            setTimeout(() => {
+                setResponseState(null);
+                if (response.data.updatedStockProduct._id === selectedProduct?._id) {
+                    onProductAdded();
+                    onClose(); // Ferme la modal après l'envoi
+                }
+            }, 1000);
+        }
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center">
-            <div className="bg-white p-4 rounded-lg">
+        <div className="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center mt-10 px-2">
+            <div className={`bg-white p-4 rounded-lg ${responseState === 'success' ? 'border-y-8 border-green-400' : responseState === 'error' ? 'border-y-8 border-red-400' : ''}`}>
                 <h3 className="text-lg font-bold mb-4">Sélectionnez un produit</h3>
                 <input 
                     type="text" 
@@ -47,11 +72,11 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products 
                     className="border p-2 w-full mb-4"
                     onChange={(e) => setSearchTerm(e.target.value)} 
                 />
-                <table className="min-w-full table-auto">
+                <table className="w-full table-auto">
                     <thead>
                         <tr>
-                            <th className="border px-4 py-2">Dénomination</th>
-                            <th className="border px-4 py-2">Référence</th>
+                            <th style={{ width: '60%' }} className="border px-4 py-2">Dénomination</th>
+                            <th style={{ width: '40%' }} className="border px-4 py-2">Référence</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -61,8 +86,12 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products 
                                 className={`border ${selectedProduct?._id === product._id ? 'bg-blue-200' : 'bg-white'}`}
                                 onClick={() => handleProductSelect(product)}
                             >
-                                <td className="border px-4 py-2">{product.denomination}</td>
-                                <td className="border px-4 py-2">{product.reference}</td>
+                                <td style={{ width: '60%' }}className="border px-4 py-2 overflow-auto">
+                                    <div className="h-10">{product.denomination}</div>
+                                </td>
+                                <td style={{ width: '40%' }} className="border px-4 py-2 overflow-auto">
+                                    <div className="h-10">{product.reference}</div>
+                                </td>
                             </tr>
                         ))}
                     </tbody>

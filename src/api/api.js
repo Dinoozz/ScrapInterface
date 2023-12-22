@@ -13,7 +13,7 @@ const sendRequest = async (method, endpoint, data = {}) => {
         const config = getAuthConfig();
         const url = `${API_BASE_URL}${endpoint}`;
         const response = await axios({ method, url, data, ...config });
-        return response.data;
+        return response;
     } catch (error) {
         throw error.response ? error.response.data : new Error('An error occurred');
     }
@@ -23,7 +23,7 @@ const sendRequestWithoutAuth = async (method, endpoint, data = {}) => {
     try {
         const url = `${API_BASE_URL}${endpoint}`;
         const response = await axios({ method, url, data });
-        return response.data;
+        return response;
     } catch (error) {
         throw error.response ? error.response.data : new Error('An error occurred');
     }
@@ -178,7 +178,33 @@ const api = {
         return sendRequest('put', `/stockProduct/searchproduct`, stockProduct);
     },
 
+    async addStockProduct(stockProduct) {
+        return sendRequest('post', '/stockProduct', stockProduct);
+    },
+
+    async updateStockProduct(id, stockProduct) {
+        return sendRequest('put', `/stockProduct/${id}`, stockProduct);
+    },
+
     /* StockHistory Methods */
+
+    /* StockHistory Methods */
+
+    async getAllStockError() {
+        return sendRequest('get', `/stockErrors`);
+    },
+
+    async getStockErrorById(id) {
+        return sendRequest('get', `/stockErrors/${id}`);
+    },
+
+    async updateStockErrorState(id, errorState) {
+        return sendRequest('put', `/stockErrors/${id}`, errorState);
+    },
+
+    async genStockError() {
+        return sendRequest('get', `/stockErrors/process`);
+    },
 
     // ... ici, vous pouvez continuer avec d'autres méthodes si nécessaire
 };

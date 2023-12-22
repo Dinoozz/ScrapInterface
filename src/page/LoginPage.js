@@ -36,8 +36,8 @@ const LoginRegister = () => {
     };
     try {
       const response = await api.login(body);
-      if (response && response.token) {
-        localStorage.setItem("JWToken", response.token);
+      if (response.data && response.data.token) {
+        localStorage.setItem("JWToken", response.data.token);
         logIn();
         navigate('/');
       } else {

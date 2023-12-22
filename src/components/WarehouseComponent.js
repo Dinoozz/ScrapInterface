@@ -19,7 +19,7 @@ const WarehouseManagerComponent = () => {
   const fetchWarehouses = async () => {
     try {
       const response = await api.getAllWarehouse();
-      setWarehouses(response);
+      setWarehouses(response.data);
     } catch (error) {
       console.error('Erreur lors de la récupération des entrepôts:', error);
     }
@@ -28,7 +28,7 @@ const WarehouseManagerComponent = () => {
   const fetchTeams = async () => {
     try {
       const response = await api.getAllTeams();
-      setTeams(response);
+      setTeams(response.data);
     } catch (error) {
       console.error('Erreur lors de la récupération des équipes:', error);
     }
@@ -117,7 +117,7 @@ const WarehouseManagerComponent = () => {
   const refreshSelectedWarehouse = async (warehouseId) => {
     try {
       const updatedWarehouse = await api.getWarehouseById(warehouseId);
-      setSelectedWarehouse(updatedWarehouse);
+      setSelectedWarehouse(updatedWarehouse.data);
       fetchWarehouses(); // Optionally refresh the entire warehouses list
     } catch (error) {
       console.error("Erreur lors de la récupération de l'entrepôt:", error);

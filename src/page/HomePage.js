@@ -21,11 +21,11 @@ const HomePage = () => {
     const fetchProducts = async () => {
       try {
         const response = await api.getPriceHistoryForAllSiteByProduct();
-        const origins = new Set(response.flatMap(p => p.latestOriginHistory.map(h => h.site.toLowerCase())));
-        const sites = new Set(response.flatMap(p => p.latestPriceHistory.map(h => h.site.toLowerCase())));
+        const origins = new Set(response.data.flatMap(p => p.latestOriginHistory.map(h => h.site.toLowerCase())));
+        const sites = new Set(response.data.flatMap(p => p.latestPriceHistory.map(h => h.site.toLowerCase())));
         setUniqueSites(Array.from(new Set([...origins, ...sites])));
-        setProducts(response);
-        setOriginalProducts(response); // Sauvegarder le tableau original
+        setProducts(response.data);
+        setOriginalProducts(response.data); // Sauvegarder le tableau original
       } catch (error) {
         console.error('Erreur lors de la récupération des produits', error);
       }
