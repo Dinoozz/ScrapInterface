@@ -9,19 +9,20 @@ import profile from '../assets/profile.png';
 <Link to="/page2" className="text-white px-3 py-2 rounded-md text-sm font-medium">Page 2</Link>
 <Link to="/page3" className="text-white px-3 py-2 rounded-md text-sm font-medium">Page 3</Link>
 <Link to="/page4" className="text-white px-3 py-2 rounded-md text-sm font-medium">Admin Dashboard</Link>
+{isLoggedIn && <Link to="/inventory" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Inventaire</Link>}
 */
 
 const Menu = () => {
   const jwtToken = localStorage.getItem('JWToken');
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, userRole } = useContext(AuthContext);
 
   return (
     <nav className="flex justify-between items-center fixed top-0 left-0 right-0 z-10 bg-gray-800 p-4">
       <div className="flex items-center">
         
         <Link to="/"><img src={logo} alt="Logo" className="h-12 w-12 mr-2" /></Link>
-    {isLoggedIn && <Link to="/admin" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Admin Dashboard</Link>}
-    {isLoggedIn && <Link to="/inventory" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Inventaire</Link>}
+        <Link to="/" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Accueil</Link>
+    {isLoggedIn && userRole === "admin" && <Link to="/admin/users" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Admin Dashboard</Link>}
       </div>
       <div className="flex items-center">
         {!isLoggedIn && <Link to="/login" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Se connecter</Link>}

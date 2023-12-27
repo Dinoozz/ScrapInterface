@@ -54,7 +54,7 @@ const ProfilePage = () => {
             document.cookie.split(";").forEach((c) => {
                 document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
             });
-            navigate('/');
+            navigate('/login');
         } catch (error) {
             console.error('Erreur lors de la déconnexion:', error);
         }

@@ -19,7 +19,7 @@ const App = () => {
         <div className='mt-16'>
           <Menu />
           <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<InventoryPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/admin" element={<SideMenu />}>
@@ -27,7 +27,7 @@ const App = () => {
             <Route path="stockerror" element ={<StockErrorPage />}/>
             <Route path="warehouse" element ={<WarehousePage />}/>
           </Route>
-          <Route path="/inventory" element={<InventoryPage />} />
+          {/*<Route path="/inventory" element={<InventoryPage />} />*/}
           // Ajoutez d'autres routes si nécessaire
 
             {/* Définissez d'autres routes selon vos besoins */}

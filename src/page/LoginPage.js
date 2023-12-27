@@ -8,8 +8,7 @@ const LoginRegister = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(''); // État pour gérer les messages d'erreur
-  const { logIn } = useContext(AuthContext);
-  const { isLoggedIn } = useContext(AuthContext);
+  const { logIn, isLoggedIn, assignUserRole } = useContext(AuthContext);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -36,9 +35,10 @@ const LoginRegister = () => {
     };
     try {
       const response = await api.login(body);
-      if (response.data && response.data.token) {
-        localStorage.setItem("JWToken", response.data.token);
+      if (response.data && response.data.user.token) {
+        localStorage.setItem("JWToken", response.data.user.token);
         logIn();
+        assignUserRole(response.data.user.role);
         navigate('/');
       } else {
         setError("Connexion échouée"); // Message par défaut si pas de token

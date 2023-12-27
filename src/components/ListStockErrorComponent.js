@@ -3,6 +3,7 @@ import api from '../api/api';
 
 const StockErrorList = ({ onSelectError }) => {
   const [stockErrors, setStockErrors] = useState([]);
+  const [selectedErrorId, setSelectedErrorId] = useState(null);
   
 
   useEffect(() => {
@@ -28,6 +29,11 @@ const StockErrorList = ({ onSelectError }) => {
     }
   };
 
+  const handleSelectError = (id) => {
+    setSelectedErrorId(id);
+    onSelectError(id);
+  };
+
   const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
   return (
@@ -35,8 +41,8 @@ const StockErrorList = ({ onSelectError }) => {
       {stockErrors.map((error) => (
         <div
           key={error._id}
-          className={`flex items-center m-2 p-3 rounded-lg border border-gray-300 cursor-pointer ${error.statut ? 'bg-green-200' : 'bg-red-200'}`}
-          onClick={() => onSelectError(error._id)}
+          className={`flex items-center m-2 p-3 rounded-lg border border-gray-300 cursor-pointer ${selectedErrorId === error._id ? 'bg-red-400' : error.statut ? 'bg-green-200' : 'bg-red-200'}`}
+          onClick={() => handleSelectError(error._id)}
         >
           <p className="flex-grow">{capitalizeFirstLetter(error.origin)}</p>
           <button

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../components/AuthContext';
 import api from '../api/api';
 import BottomMenu from '../components/StockBottomMenu';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const WarehouseProductList = () => {
     const navigate = useNavigate();
+    const { isLoggedIn } = useContext(AuthContext);
     const [userTeamId, setUserTeamId] = useState('');
     const [userTeamName, setUserTeamName] = useState('');
     const [filteredWarehouses, setFilteredWarehouses] = useState([]);
@@ -16,7 +18,13 @@ const WarehouseProductList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 10;
 
+    
+
     useEffect(() => {
+        if (!isLoggedIn) {
+            // Redirigez l'utilisateur vers la page d'accueil s'il est déjà connecté
+            navigate('/login');
+        }
         fetchUserTeam();
     }, []);
 

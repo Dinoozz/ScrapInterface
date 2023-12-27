@@ -35,7 +35,7 @@ const BottomMenu = ({ userTeam, selectedWarehouse, products, onProductAdded }) =
             )}
             {/* Modale pour "Caméra" */}
             {modalToShow === 'modal2' && (
-                <StockOCRModal onClose={closeModal} userTeam={userTeam} selectedWarehouse={selectedWarehouse} products={products} />
+                <StockOCRModal onClose={closeModal} userTeam={userTeam} selectedWarehouse={selectedWarehouse} products={products} onProductAdded={onProductAdded}/>
             )}
             {/* Modale pour "Recherche" */}
             {modalToShow === 'modal3' && (

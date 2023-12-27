@@ -19,8 +19,10 @@ const ProductCreationModal = ({ onClose, userTeam, selectedWarehouse, onProductA
     };
 
     const handleReferenceChange = (e) => {
-        setReference(e.target.value);
+        const upperCaseReference = e.target.value.toUpperCase().replace(/\s+/g, ''); // Convertir en majuscules et supprimer les espaces
+        setReference(upperCaseReference);
     };
+    
 
     const handleQuantityChange = (e) => {
         setQuantity(e.target.value);

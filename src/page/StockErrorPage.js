@@ -43,12 +43,30 @@ const StockErrorPage = () => {
             if (response.data.message === "Processus de vérification terminé")
                 alert('Erreur de stock généré avec succès.');
             handleStatusChange();
-            console.log(response);
         } catch (error) {
             console.error('Erreur lors de la génération d\'erreur:', error);
             alert('Erreur lors de la génération d\'erreur.');
         }
     };
+  
+    const handleGenCSV = async () => {
+      try {
+          const response = await api.genCSV(); // Cette API doit retourner l'URL du fichier CSV
+          const fileUrl = response.data.fileUrl; // Assurez-vous que cette propriété contient l'URL du fichier
+  
+          // Créer un lien pour le téléchargement
+          const downloadLink = document.createElement('a');
+          downloadLink.href = fileUrl;
+          downloadLink.setAttribute('download', 'products.csv'); // Définit le nom du fichier à télécharger
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+      } catch (error) {
+          console.error('Erreur lors de la génération du CSV:', error);
+          alert(error.message);
+      }
+  };
+  
 
   return (
     <div className="flex w-full">
@@ -76,7 +94,13 @@ const StockErrorPage = () => {
             className="mt-2 px-4 py-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
             onClick={handleGenError}
         >
-            Gen
+            Détection des erreurs
+        </button>
+        <button
+            className="mt-2 px-4 py-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            onClick={handleGenCSV}
+        >
+            Génération du CSV
         </button>
       </div>
       <div className="w-1/5 mt-8">
@@ -84,7 +108,6 @@ const StockErrorPage = () => {
       </div>
       <div className="w-3/5 mt-8">
         {selectedErrorId && <ErrorDetails errorId={selectedErrorId} onStatusChange={handleStatusChange} />}
-        {/* Autre futur composant ici */}
       </div>
     </div>
   );

@@ -186,6 +186,10 @@ const api = {
         return sendRequest('put', `/stockProduct/${id}`, stockProduct);
     },
 
+    async correctionStockProduct(id, stockProduct) {
+        return sendRequest('put', `/stockProduct/correction/${id}`, stockProduct);
+    },
+
     /* StockHistory Methods */
 
     /* StockHistory Methods */
@@ -205,6 +209,10 @@ const api = {
     async genStockError() {
         return sendRequest('get', `/stockErrors/process`);
     },
+
+    async genCSV() {
+        return sendRequest('get', `/stockErrors/generate-csv`)
+    }
 
     // ... ici, vous pouvez continuer avec d'autres méthodes si nécessaire
 };
