@@ -9,7 +9,7 @@ function timeout(delay) {
 
 const LoadingPage = () => {
   const barStyle = {
-    width: '1vw',
+    width: '2vw',
     height: '8vh',
     backgroundColor: '#a52a2a',
     marginRight: '1vw',
@@ -43,14 +43,13 @@ const LoadingPage = () => {
   `;
 
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100vh',
-      backgroundImage: 'url("https://cuisinesetfourneaux.com/wp-content/uploads/2022/12/cropped-logo-Cuisines-et-fourneaux-1-e1672411113633.png")',
-      backgroundSize: 'cover',
-      opacity: 0.5
+    <div className="flex justify-center items-center h-screen" style={{
+      backgroundImage: 'url("https://cuisinesetfourneaux.com/wp-content/uploads/2023/12/ldbg.jpeg")',
+      backgroundSize: 'auto 100%',
+      backgroundColor: '#808080',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      opacity: 0.8
     }}>
       <style>{animationStyle}</style>
       <div style={{ ...barStyle, animationDelay: '0s' }}></div>
