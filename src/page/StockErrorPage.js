@@ -51,21 +51,22 @@ const StockErrorPage = () => {
   
     const handleGenCSV = async () => {
       try {
-          const response = await api.genCSV(); // Cette API doit retourner l'URL du fichier CSV
-          const fileUrl = response.data.fileUrl; // Assurez-vous que cette propriété contient l'URL du fichier
+          // Effectuer la requête pour générer le fichier CSV
+          const response = await api.genCSV(); // Cette API doit déclencher le téléchargement du fichier CSV
   
-          // Créer un lien pour le téléchargement
-          const downloadLink = document.createElement('a');
-          downloadLink.href = fileUrl;
-          downloadLink.setAttribute('download', 'products.csv'); // Définit le nom du fichier à télécharger
-          document.body.appendChild(downloadLink);
-          downloadLink.click();
-          document.body.removeChild(downloadLink);
+          // Vérifier si la réponse est correcte
+          if (response.status === 200) {
+              console.log("Téléchargement du CSV lancé.");
+          } else {
+              console.error('Erreur lors de la génération du CSV:', response);
+              alert('Erreur lors de la génération du CSV.');
+          }
       } catch (error) {
           console.error('Erreur lors de la génération du CSV:', error);
           alert(error.message);
       }
   };
+  
   
 
   return (
