@@ -30,10 +30,11 @@ const OCRModal = ({ onClose, userTeam, selectedWarehouse, onProductAdded }) => {
     }, []);
 
     useEffect(() => {
-        const webcam = webcamRef.current;
-        if (showCamera && webcam && webcam.video.readyState === 4) {
+        
+        if (showCamera) {
             const intervalId = setInterval(() => {
-                if (!isProcessing) {
+                const webcam = webcamRef.current;
+                if (!isProcessing && webcam && webcam.video.readyState === 4) {
                     capture();
                 }
             }, 500); // Capture toutes les 0.5 secondes
