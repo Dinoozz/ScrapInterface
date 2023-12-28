@@ -192,7 +192,7 @@ const OCRModal = ({ onClose, userTeam, selectedWarehouse, onProductAdded }) => {
                                 <label className="mr-2"><strong>Quantité :</strong></label>
                                 <input 
                                     type="number" 
-                                    className="border p-2 w-8"
+                                    className="border p-2 w-32"
                                     value={quantity}
                                     onChange={handleQuantityChange}
                                     min="1"
