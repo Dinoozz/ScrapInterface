@@ -56,7 +56,6 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products,
                 setResponseState(null);
                 if (response.data.updatedStockProduct._id === selectedProduct?._id) {
                     onProductAdded();
-                    onClose(); // Ferme la modal après l'envoi
                 }
             }, 1000);
         }
@@ -72,7 +71,7 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products,
                     className="border p-2 w-full mb-4"
                     onChange={(e) => setSearchTerm(e.target.value)} 
                 />
-                <table className="w-full table-auto">
+                <table className="w-full table-auto ">
                     <thead>
                         <tr>
                             <th style={{ width: '60%' }} className="border px-4 py-2">Dénomination</th>

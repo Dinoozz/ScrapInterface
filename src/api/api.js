@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://api2.camille-lecoq.com/api';
-//const API_BASE_URL = 'http://localhost:5000/api';
+//const API_BASE_URL = 'https://api2.camille-lecoq.com/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 
 const getAuthConfig = () => {
     const JWtoken = localStorage.getItem('JWToken');
@@ -191,6 +191,10 @@ const api = {
     },
 
     /* StockHistory Methods */
+
+    async getAllStockHistoryByTeamByWarehouse(teamID, warehouseID) {
+        return sendRequest('get', `/stockHistory/warehouse/${warehouseID}/team/${teamID}`);
+    },
 
     /* StockHistory Methods */
 

@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../components/AuthContext';
 import api from '../api/api';
 import BottomMenu from '../components/StockBottomMenu';
+import StockHistoryModal from '../components/StockHistoryModal'; //
+import { FaHistory } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -16,6 +18,7 @@ const WarehouseProductList = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [showModal, setShowModal] = useState(false);
     const rowsPerPage = 10;
 
     
@@ -159,10 +162,25 @@ const WarehouseProductList = () => {
         setSearchTerm(event.target.value);
     };
 
+
+    const handleOpenModal = () => {
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
     return (
         <div className="p-4 mb-16">
             <div className="my-4">
                 <h2 className="text-lg font-bold">Equipe : {userTeamName}</h2>
+                {selectedWarehouseId && <button 
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center mt-2"
+                onClick={handleOpenModal}
+            >
+                <FaHistory className="mr-2" /> Historique
+            </button>}
             </div>
             <select 
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -213,12 +231,12 @@ const WarehouseProductList = () => {
                     if (pageNumber === "...") {
                         return <span className="px- py-2">...</span>;
                     }
-
+                    
                     return (
                         <button
-                            key={pageNumber}
-                            onClick={() => pageNumber !== "..." && setCurrentPage(pageNumber)}
-                            className={`px-4 py-2 border ${currentPage === pageNumber ? 'bg-blue-500 text-white' : 'bg-white'}`}
+                        key={pageNumber}
+                        onClick={() => pageNumber !== "..." && setCurrentPage(pageNumber)}
+                        className={`px-4 py-2 border ${currentPage === pageNumber ? 'bg-blue-500 text-white' : 'bg-white'}`}
                         >
                             {pageNumber}
                         </button>
@@ -226,10 +244,11 @@ const WarehouseProductList = () => {
                 })}
             </div>
             { selectedWarehouseId && <BottomMenu userTeam={userTeamId} selectedWarehouse={selectedWarehouseId} products={products} onProductAdded={handleProductAdded}/>}
+            { showModal && <StockHistoryModal onClose={handleCloseModal} userTeam={userTeamId} userWarehouse={selectedWarehouseId}/>}
         </div>
 
-        
-    );
+
+);
 };
 
 export default WarehouseProductList;
