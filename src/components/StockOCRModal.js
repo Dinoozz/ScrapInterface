@@ -24,7 +24,7 @@ const OCRModal = ({ onClose, userTeam, selectedWarehouse, onProductAdded }) => {
             const videoDevices = devices.filter(device => device.kind === 'videoinput');
             setDevices(videoDevices);
             if (videoDevices.length > 0) {
-                setCurrentDeviceId(videoDevices[0].deviceId);
+                setCurrentDeviceId(videoDevices[-1].deviceId);
             }
         });
     }, []);
