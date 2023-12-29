@@ -47,6 +47,7 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products,
     const handleQuantityChange = (e) => {
         setQuantity(e.target.value);
     };
+    
 
     const submitHandler = async () => {
         if (!selectedProduct || !quantity) {
@@ -72,6 +73,8 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products,
                 if (response.data.updatedStockProduct._id === selectedProduct?._id) {
                     onProductAdded();
                     setCurrentPage(0);
+                    setQuantity(1);
+                    setSelectedProduct(null);
                 }
             }, 1000);
         }
