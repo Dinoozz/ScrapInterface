@@ -65,7 +65,6 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products,
                 setResponseState('success');
             } else
                 setResponseState('error');
-            console.log();
                 
             
             setTimeout(() => {
@@ -122,7 +121,7 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products,
                     {/* Conteneur pour la quantité, avec flex-grow pour égaliser la largeur */}
                     <div className="flex-grow flex justify-center">
                             {currentPage > 0 && (
-                                <button onClick={goToPreviousPage} className='mx-2'>
+                                <button onClick={goToPreviousPage} className='mx-2 bg-blue-400 rounded p-3'>
                                     <FaArrowLeft />
                                 </button>
                             )}
@@ -135,7 +134,7 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products,
                                 min="1"
                             />
                             {filteredProducts.length === 5 && (
-                                    <button onClick={goToNextPage} className='mx-2'>
+                                    <button onClick={goToNextPage} className='mx-2 bg-blue-400 rounded p-3'>
                                         <FaArrowRight/>
                                     </button>
                             )}
