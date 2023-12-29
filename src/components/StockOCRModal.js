@@ -162,7 +162,9 @@ const OCRModal = ({ onClose, userTeam, selectedWarehouse, onProductAdded }) => {
                 setResponseState(null);
                 if (response.data.updatedStockProduct._id === foundProduct?._id) {
                     onProductAdded();
-                    onClose(); // Ferme la modal après l'envoi
+                    setFoundProduct(false);
+                    setQuantity(1);
+                    setIsProductFound(false);
                 }
             }, 1000);
         }
