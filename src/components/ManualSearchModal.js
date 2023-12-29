@@ -9,6 +9,7 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products,
     const [quantity, setQuantity] = useState(1);
     const [responseState, setResponseState] = useState('null');
     const [currentPage, setCurrentPage] = useState(0);
+    const [inputKey, setInputKey] = useState(Date.now());
     const productsPerPage = 5;
 
     useEffect(() => {
@@ -50,7 +51,7 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products,
     
 
     const submitHandler = async () => {
-        if (!selectedProduct || !quantity) {
+        if ((!selectedProduct || !quantity) || !filteredProducts.find(product => product._id === selectedProduct._id)) {
             setResponseState('error');
             setTimeout(() => {
                 setResponseState(null);
@@ -75,6 +76,8 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products,
                     setCurrentPage(0);
                     setQuantity(1);
                     setSelectedProduct(null);
+                    setSearchTerm('');
+                    setInputKey(Date.now());
                 }
             }, 1000);
         }
@@ -85,6 +88,7 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products,
             <div className={`bg-white p-4 rounded-lg ${responseState === 'success' ? 'border-y-8 border-green-400' : responseState === 'error' ? 'border-y-8 border-red-400' : ''}`}>
                 <h3 className="text-lg font-bold mb-4">Sélectionnez un produit</h3>
                 <input 
+                    key={inputKey}
                     type="text" 
                     placeholder="Recherche..." 
                     className="border p-2 w-full mb-4"
