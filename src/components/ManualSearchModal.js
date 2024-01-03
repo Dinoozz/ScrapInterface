@@ -10,6 +10,7 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products,
     const [responseState, setResponseState] = useState('null');
     const [currentPage, setCurrentPage] = useState(0);
     const [inputKey, setInputKey] = useState(Date.now());
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const productsPerPage = 5;
 
     useEffect(() => {
@@ -57,35 +58,42 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products,
                 setResponseState(null);
             }, 1000);
         } else if (window.confirm("Êtes-vous sûr de vouloir ajouter ce produit ?")) {
-            // Votre logique pour envoyer la requête API
-            const response = await api.updateStockProduct(selectedProduct?._id, {
-                teamId: userTeam,
-                warehouseId: selectedWarehouse,
-                quantity: quantity
-            });
-            if (response.status == 200) {
-                setResponseState('success');
-            } else
-                setResponseState('error');
-                
-            
-            setTimeout(() => {
-                setResponseState(null);
-                if (response.data.updatedStockProduct._id === selectedProduct?._id) {
+            setIsSubmitting(true); // Commencer l'envoi et afficher la bordure jaune
+    
+            try {
+                const response = await api.updateStockProduct(selectedProduct?._id, {
+                    teamId: userTeam,
+                    warehouseId: selectedWarehouse,
+                    quantity: quantity
+                });
+    
+                if (response.status === 200) {
+                    setResponseState('success');
                     onProductAdded();
                     setCurrentPage(0);
                     setQuantity(1);
                     setSelectedProduct(null);
                     setSearchTerm('');
                     setInputKey(Date.now());
+                } else {
+                    setResponseState('error');
                 }
+            } catch (error) {
+                setResponseState('error');
+            } finally {
+                setIsSubmitting(false); // Terminer l'envoi et retirer la bordure jaune
+            }
+    
+            setTimeout(() => {
+                setResponseState(null);
             }, 1000);
         }
     };
+    
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center mt-10 px-2">
-            <div className={`bg-white p-4 rounded-lg ${responseState === 'success' ? 'border-y-8 border-green-400' : responseState === 'error' ? 'border-y-8 border-red-400' : ''}`}>
+            <div className={`bg-white p-4 rounded-lg ${responseState === 'success' ? 'border-y-8 border-green-400' : responseState === 'error' ? 'border-y-8 border-red-400' : isSubmitting ? 'border-y-8 border-yellow-400' : ''}`}>
                 <h3 className="text-lg font-bold mb-4">Sélectionnez un produit</h3>
                 <input 
                     key={inputKey}
@@ -153,6 +161,7 @@ const ProductSelectionModal = ({ onClose, userTeam, selectedWarehouse, products,
                     <button 
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         onClick={submitHandler}
+                        disabled={isSubmitting} // Désactiver le bouton lors de l'envoi
                     >
                         Ajouter
                     </button>
